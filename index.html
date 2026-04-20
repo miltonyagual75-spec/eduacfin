@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Educación Financiera – UESER</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  :root{
+    --navy:#0A1628;
+    --blue:#1A3A6E;
+    --blue2:#2563EB;
+    --gold:#D4A017;
+    --gold2:#F5C842;
+    --green:#10B981;
+    --red:#EF4444;
+    --amber:#F59E0B;
+    --bg:#f0f2f5;
+    --card:#ffffff;
+    --card2:#f3f4f6;
+    --border:rgba(0,0,0,0.1);
+    --border2:rgba(0,0,0,0.18);
+    --txt:#111827;
+    --txt2:#6b7280;
+    --txt3:#9ca3af;
+    --r:12px;
+  }
+
+  html,body{
+    height:100%;
+    background:var(--bg);
+    font-family:'Nunito',sans-serif;
+    color:var(--txt);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ── LAYOUT WRAPPER ── */
+  #app{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ── SCREENS ── */
+  .screen{display:none;flex-direction:column;min-height:100vh;animation:fi .28s ease}
+  .screen.active{display:flex}
+  @keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ════════════════════════ HEADER ════════════════════════ */
+  .hdr{
+    background:linear-gradient(135deg,var(--navy),var(--blue));
+    padding:clamp(10px,2vw,16px) clamp(14px,4vw,32px);
+    display:flex;align-items:center;justify-content:space-between;
+    gap:10px;position:sticky;top:0;z-index:10;
+  }
+  .lgo{display:flex;align-items:center;gap:10px}
+  .lgo-c{
+    width:clamp(32px,5vw,42px);height:clamp(32px,5vw,42px);
+    background:linear-gradient(135deg,var(--gold),var(--gold2));
+    border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-family:'Fredoka One',sans-serif;font-size:clamp(10px,1.5vw,13px);
+    color:var(--navy);font-weight:900;flex-shrink:0;
+  }
+  .lgo-t{color:white}
+  .lgo-t .li{font-size:clamp(9px,1.2vw,11px);opacity:.7;font-weight:700;letter-spacing:.4px;text-transform:uppercase}
+  .lgo-t .ln{font-size:clamp(12px,1.8vw,14px);font-weight:800}
+  .gbdg{
+    background:linear-gradient(135deg,var(--gold),var(--gold2));
+    color:var(--navy);border-radius:20px;
+    padding:4px clamp(8px,2vw,14px);
+    font-size:clamp(10px,1.4vw,12px);font-weight:800;white-space:nowrap;
+  }
+
+  /* ════════════════════════ REGISTRO ════════════════════════ */
+  .rw{
+    flex:1;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;padding:clamp(20px,4vw,40px) clamp(16px,4vw,24px);
+    background:linear-gradient(160deg,var(--navy),var(--blue));
+  }
+  .rc{
+    background:var(--card);border-radius:20px;
+    padding:clamp(20px,4vw,32px);
+    width:100%;max-width:440px;
+    border:1px solid rgba(212,160,23,.3);
+  }
+  .rt{text-align:center;margin-bottom:20px}
+  .rt .ri{font-size:clamp(28px,5vw,40px);margin-bottom:8px}
+  .rt h1{font-family:'Fredoka One',sans-serif;font-size:clamp(18px,3.5vw,24px);color:var(--blue)}
+  .rt p{font-size:clamp(11px,1.5vw,13px);color:var(--txt2);margin-top:5px}
+  .fg{margin-bottom:14px}
+  .fg label{display:block;font-size:clamp(10px,1.3vw,12px);font-weight:800;color:var(--txt2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+  .fg input,.fg select{
+    width:100%;padding:clamp(9px,1.5vw,12px) 13px;border-radius:10px;
+    border:1.5px solid var(--border2);background:var(--card2);
+    color:var(--txt);font-family:'Nunito',sans-serif;
+    font-size:clamp(13px,1.8vw,15px);font-weight:600;outline:none;transition:.2s;
+  }
+  .fg input:focus,.fg select:focus{border-color:var(--blue)}
+  .btn-reg{
+    width:100%;padding:clamp(11px,1.8vw,14px);
+    background:linear-gradient(135deg,var(--blue),var(--blue2));
+    color:white;border:none;border-radius:12px;
+    font-family:'Nunito',sans-serif;font-size:clamp(13px,2vw,15px);
+    font-weight:800;cursor:pointer;margin-top:6px;transition:.2s;
+  }
+  .btn-reg:hover{opacity:.92;transform:translateY(-1px)}
+  .gdv{text-align:center;color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.8px;margin:12px 0 8px}
+
+  /* ════════════════════════ DASHBOARD ════════════════════════ */
+  .dash-wrap{flex:1;display:flex;flex-direction:column}
+  .db{
+    flex:1;padding:clamp(12px,2.5vw,20px);
+    display:flex;flex-direction:column;gap:clamp(10px,2vw,16px);
+    overflow-y:auto;
+  }
+  .wb{
+    background:linear-gradient(135deg,var(--navy),var(--blue));
+    border-radius:var(--r);padding:clamp(14px,2.5vw,20px) clamp(16px,3vw,24px);color:white;
+  }
+  .wb h2{font-family:'Fredoka One',sans-serif;font-size:clamp(15px,2.5vw,20px);margin-bottom:3px}
+  .wb p{font-size:clamp(11px,1.4vw,13px);opacity:.8}
+  .pb{margin-top:12px}
+  .pl{display:flex;justify-content:space-between;font-size:clamp(10px,1.3vw,12px);margin-bottom:5px;font-weight:700}
+  .pw{background:rgba(255,255,255,.2);border-radius:20px;height:9px;overflow:hidden}
+  .pf{background:linear-gradient(90deg,var(--gold),var(--gold2));height:100%;border-radius:20px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+
+  .sr{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(6px,1.5vw,10px)}
+  .sc{background:var(--card);border-radius:10px;border:.5px solid var(--border);padding:clamp(10px,1.8vw,14px);text-align:center}
+  .sv{font-family:'Fredoka One',sans-serif;font-size:clamp(18px,3vw,24px);color:var(--blue);line-height:1}
+  .sl{font-size:clamp(9px,1.2vw,11px);color:var(--txt2);font-weight:700;margin-top:3px}
+
+  .stl{font-size:clamp(11px,1.4vw,13px);font-weight:800;color:var(--txt2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+  .lg{display:flex;flex-direction:column;gap:clamp(5px,1vw,8px)}
+  .li2{
+    background:var(--card);border-radius:10px;border:.5px solid var(--border);
+    padding:clamp(9px,1.5vw,12px) clamp(12px,2vw,16px);
+    display:flex;align-items:center;gap:10px;cursor:pointer;transition:.2s;
+  }
+  .li2:hover:not(.lk){border-color:var(--blue2)}
+  .li2.lk{opacity:.5;cursor:default}
+  .li2.cm{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.04)}
+  .li2.al{border-color:var(--blue2);border-width:1.5px;background:rgba(37,99,235,.04)}
+  .ln2{
+    width:clamp(30px,4vw,36px);height:clamp(30px,4vw,36px);
+    border-radius:9px;display:flex;align-items:center;justify-content:center;
+    font-family:'Fredoka One',sans-serif;font-size:clamp(12px,1.8vw,15px);flex-shrink:0;
+  }
+  .ln2.d{background:#D1FAE5;color:#065F46}
+  .ln2.a{background:#DBEAFE;color:#1E3A8A}
+  .ln2.l{background:var(--card2);color:var(--txt3)}
+  .lif{flex:1;min-width:0}
+  .lif .ln3{font-size:clamp(12px,1.6vw,14px);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lif .ls{font-size:clamp(10px,1.3vw,12px);color:var(--txt2);font-weight:600;margin-top:2px}
+  .bdg{padding:3px clamp(6px,1vw,9px);border-radius:20px;font-size:clamp(9px,1.1vw,11px);font-weight:800;white-space:nowrap}
+  .bdg.d{background:#D1FAE5;color:#065F46}
+  .bdg.a{background:#DBEAFE;color:#1E3A8A}
+  .bdg.l{background:var(--card2);color:var(--txt3)}
+
+  /* ════════════════════════ NAV BAR ════════════════════════ */
+  .nav2{
+    background:var(--card);border-top:.5px solid var(--border);
+    display:flex;padding:clamp(5px,1vw,8px) 0 clamp(4px,.8vw,6px);
+    position:sticky;bottom:0;z-index:10;
+  }
+  .nb{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+    background:none;border:none;cursor:pointer;
+    padding:5px 4px;color:var(--txt3);transition:.2s;
+  }
+  .nb.ac{color:var(--blue)}
+  .nb .ni{font-size:clamp(15px,2.5vw,19px);line-height:1}
+  .nb .nl{font-size:clamp(9px,1.2vw,11px);font-weight:700}
+
+  /* ════════════════════════ DIPLOMA SCREEN ════════════════════════ */
+  .cw{
+    flex:1;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;padding:clamp(16px,3vw,28px);gap:clamp(12px,2vw,20px);
+    background:linear-gradient(160deg,var(--navy),var(--blue));
+    overflow-y:auto;
+  }
+  /* Locked state */
+  .cert-locked{
+    background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);
+    border-radius:16px;padding:clamp(24px,4vw,40px) clamp(20px,4vw,36px);
+    text-align:center;width:100%;max-width:440px;
+  }
+  .cert-locked .cl-icon{font-size:clamp(36px,6vw,52px);margin-bottom:12px}
+  .cert-locked h2{font-family:'Fredoka One',sans-serif;font-size:clamp(16px,2.8vw,22px);color:white;margin-bottom:8px}
+  .cert-locked p{font-size:clamp(12px,1.6vw,14px);color:rgba(255,255,255,.7);line-height:1.6;margin-bottom:16px}
+  .cert-locked .prog-wrap{background:rgba(255,255,255,.15);border-radius:20px;height:10px;overflow:hidden;margin-top:8px}
+  .cert-locked .prog-fill{background:linear-gradient(90deg,var(--gold),var(--gold2));height:100%;border-radius:20px;transition:width .8s}
+  .cert-locked .prog-label{display:flex;justify-content:space-between;font-size:clamp(10px,1.3vw,12px);font-weight:800;color:rgba(255,255,255,.8);margin-bottom:6px}
+
+  /* Certificate card */
+  .cf{background:white;border-radius:14px;padding:4px;width:100%;max-width:clamp(300px,90vw,560px);overflow:hidden}
+  .ci{background:white;border:5px solid var(--blue);border-radius:10px;padding:clamp(16px,3vw,28px) clamp(18px,3.5vw,32px);position:relative;overflow:hidden}
+  .ci::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold))}
+  .ci::after{content:'';position:absolute;bottom:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold))}
+  .ch{text-align:center;margin-bottom:10px;padding-top:4px}
+  .ci2{font-family:'Fredoka One',sans-serif;font-size:clamp(11px,1.8vw,14px);color:var(--blue)}
+  .cif{font-size:clamp(8px,1.1vw,10px);color:#666;font-weight:700;text-transform:uppercase;margin:1px 0}
+  .clm{font-size:clamp(7px,1vw,9px);color:#888;font-style:italic}
+  .cdv{height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:8px 0}
+  .ccf{font-size:clamp(8px,1.1vw,10px);color:#999;font-weight:700;text-transform:uppercase;letter-spacing:.4px;text-align:center}
+  .ctt{font-family:'Fredoka One',sans-serif;font-size:clamp(12px,2.2vw,16px);color:var(--blue);text-align:center;margin:5px 0}
+  .ca{font-size:clamp(8px,1.1vw,10px);color:#999;text-align:center;margin-bottom:3px}
+  .cnm{font-family:'Fredoka One',sans-serif;font-size:clamp(14px,2.8vw,20px);color:var(--navy);text-align:center;padding:8px;border:2px solid var(--gold);border-radius:7px;margin:5px 0;background:rgba(212,160,23,.05)}
+  .cb{font-size:clamp(8px,1.1vw,10px);color:#333;line-height:1.7;text-align:justify;margin:8px 0;font-weight:600}
+  .cdt{font-size:clamp(9px,1.3vw,11px);color:var(--blue);text-align:right;font-style:italic;font-weight:700;margin:6px 0}
+  .css2{display:flex;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid #eee}
+  .csg{text-align:center;flex:1}
+  .csl{height:1px;background:#333;margin:0 8px 5px}
+  .csn{font-size:clamp(7px,1vw,9px);font-weight:800;color:#333}
+  .csr{font-size:clamp(6px,.9vw,8px);color:#777;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
+
+  /* Download button states */
+  .btn-dl{
+    padding:clamp(10px,1.8vw,13px) clamp(20px,4vw,32px);
+    background:linear-gradient(135deg,var(--gold),var(--gold2));
+    color:var(--navy);border:none;border-radius:12px;
+    font-family:'Nunito',sans-serif;font-size:clamp(13px,1.8vw,15px);
+    font-weight:800;cursor:pointer;transition:.2s;
+    width:100%;max-width:clamp(300px,90vw,560px);
+  }
+  .btn-dl:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 20px rgba(212,160,23,.4)}
+  .btn-dl:disabled{
+    background:rgba(255,255,255,.15);color:rgba(255,255,255,.4);
+    cursor:not-allowed;transform:none;box-shadow:none;
+    border:1.5px solid rgba(255,255,255,.2);
+  }
+
+  /* ════════════════════════ LEVEL SCREEN ════════════════════════ */
+  .lvhdr{background:linear-gradient(135deg,var(--navy),var(--blue));padding:clamp(10px,2vw,14px) clamp(14px,3vw,18px);color:white}
+  .lhtp{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .bbk{background:rgba(255,255,255,.15);border:none;color:white;border-radius:7px;padding:5px 11px;font-family:'Nunito',sans-serif;font-size:clamp(11px,1.5vw,13px);font-weight:700;cursor:pointer;transition:.2s;white-space:nowrap}
+  .bbk:hover{background:rgba(255,255,255,.25)}
+  .ltb{flex:1;min-width:0}
+  .ltb .ll{font-size:clamp(9px,1.2vw,11px);opacity:.7;text-transform:uppercase;letter-spacing:.4px}
+  .ltb .lt{font-family:'Fredoka One',sans-serif;font-size:clamp(14px,2.5vw,18px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .trow{display:flex;gap:4px}
+  .tb{flex:1;padding:clamp(6px,1vw,8px) 4px;background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.7);border-radius:7px;font-family:'Nunito',sans-serif;font-size:clamp(10px,1.3vw,12px);font-weight:700;cursor:pointer;text-align:center;transition:.2s}
+  .tb.ac{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy)}
+
+  .lc{flex:1;padding:clamp(12px,2.5vw,18px);overflow-y:auto;display:flex;flex-direction:column;gap:clamp(10px,2vw,14px)}
+
+  /* ════════════════════════ CONTENT CARDS ════════════════════════ */
+  .tcard{background:var(--card);border-radius:var(--r);border:.5px solid var(--border);padding:clamp(14px,2.5vw,20px)}
+  .tcard .tci{font-size:clamp(20px,3.5vw,28px);margin-bottom:8px}
+  .tcard h3{font-size:clamp(13px,2vw,16px);font-weight:800;color:var(--blue);margin-bottom:8px}
+  .tcard p{font-size:clamp(12px,1.6vw,14px);line-height:1.7;color:var(--txt2)}
+  .abox{background:rgba(245,158,11,.08);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:10px 13px;margin-top:10px}
+  .abox .al2{font-size:clamp(9px,1.2vw,11px);font-weight:800;color:#92400E;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+  .abox p{font-size:clamp(11px,1.5vw,13px);color:var(--txt);font-weight:600;line-height:1.6}
+  .estep{background:var(--card);border-radius:10px;border:.5px solid var(--border);padding:clamp(12px,2vw,16px);display:flex;gap:10px}
+  .sn{width:26px;height:26px;background:linear-gradient(135deg,var(--blue),var(--blue2));color:white;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+  .sc2 p{font-size:clamp(11px,1.5vw,13px);line-height:1.6;color:var(--txt)}
+  .sc2 .clc{background:var(--card2);border-radius:7px;padding:7px 11px;margin-top:7px;font-size:clamp(11px,1.5vw,13px);font-weight:700;color:var(--blue);font-family:'Courier New',monospace}
+
+  /* ════════════════════════ TRIVIA ════════════════════════ */
+  .tq{background:var(--card);border-radius:var(--r);border:.5px solid var(--border);padding:clamp(14px,2.5vw,20px)}
+  .tq .qn{font-size:clamp(10px,1.3vw,12px);font-weight:800;color:var(--txt2);text-transform:uppercase;margin-bottom:6px}
+  .tq .qt{font-size:clamp(13px,1.8vw,15px);font-weight:700;color:var(--txt);margin-bottom:12px;line-height:1.5}
+  .tq .qtype{display:inline-block;font-size:clamp(9px,1.2vw,11px);font-weight:800;padding:2px 8px;border-radius:20px;margin-bottom:8px}
+  .qtype.mc{background:#DBEAFE;color:#1E3A8A}
+  .qtype.ex{background:#D1FAE5;color:#065F46}
+  .ol{display:flex;flex-direction:column;gap:clamp(5px,1vw,8px)}
+
+  .ob{
+    padding:clamp(9px,1.5vw,11px) 13px;border-radius:9px;
+    border:1.5px solid var(--border2);background:var(--card2);
+    color:var(--txt);font-family:'Nunito',sans-serif;
+    font-size:clamp(12px,1.6vw,13px);font-weight:600;
+    cursor:pointer;text-align:left;transition:background .15s,border-color .15s,color .15s;
+    display:flex;align-items:center;gap:8px;width:100%;
+  }
+  .ob:hover:not(:disabled){border-color:var(--blue2);background:rgba(37,99,235,.07)}
+  .ob.sel{border-color:var(--blue2);background:#DBEAFE;color:#1E3A8A;font-weight:700}
+  .ob.sel .ob-dot{background:var(--blue2);border-color:var(--blue2)}
+  .ob.cr{border-color:var(--green);background:#D1FAE5;color:#065F46;font-weight:700}
+  .ob.cr .ob-dot{background:var(--green);border-color:var(--green)}
+  .ob.wr{border-color:var(--red);background:#FEE2E2;color:#991B1B}
+  .ob.wr .ob-dot{background:var(--red);border-color:var(--red)}
+  .ob-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border2);flex-shrink:0;transition:background .15s,border-color .15s}
+  .ob-txt{flex:1}
+
+  .ex-input-wrap{display:flex;gap:8px;margin-top:8px}
+  .ex-input-wrap input{
+    flex:1;padding:9px 12px;border-radius:8px;
+    border:1.5px solid var(--border2);background:var(--card2);
+    color:var(--txt);font-family:'Nunito',sans-serif;
+    font-size:clamp(12px,1.6vw,14px);font-weight:700;outline:none;
+    transition:border-color .2s,background .2s;
+  }
+  .ex-input-wrap input:focus{border-color:var(--blue)}
+  .ex-input-wrap input.inp-sel{border-color:var(--blue2);background:#EFF6FF}
+  .ex-check{
+    padding:9px clamp(10px,2vw,16px);
+    background:linear-gradient(135deg,var(--blue),var(--blue2));
+    color:white;border:none;border-radius:8px;
+    font-family:'Nunito',sans-serif;font-size:clamp(11px,1.4vw,13px);font-weight:800;cursor:pointer;
+    white-space:nowrap;
+  }
+  .ex-fb{margin-top:8px;padding:8px 12px;border-radius:8px;font-size:clamp(11px,1.5vw,13px);font-weight:700}
+  .ex-fb.ok{background:#D1FAE5;color:#065F46}
+  .ex-fb.no{background:#FEE2E2;color:#991B1B}
+
+  .tscore{text-align:center;padding:clamp(14px,2.5vw,22px);background:var(--card);border-radius:var(--r);border:.5px solid var(--border)}
+  .tscore .sb{font-family:'Fredoka One',sans-serif;font-size:clamp(36px,6vw,48px);color:var(--blue)}
+  .tscore .slb{font-size:clamp(12px,1.6vw,14px);color:var(--txt2);font-weight:600}
+  .progress-mini{height:6px;background:var(--card2);border-radius:20px;overflow:hidden;margin-top:10px}
+  .progress-mini-fill{height:100%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:20px}
+
+  .btn-p{
+    padding:clamp(11px,1.8vw,13px);
+    background:linear-gradient(135deg,var(--blue),var(--blue2));
+    color:white;border:none;border-radius:10px;
+    font-family:'Nunito',sans-serif;font-size:clamp(13px,1.8vw,15px);
+    font-weight:800;cursor:pointer;width:100%;transition:.2s;
+  }
+  .btn-p:hover:not(:disabled){opacity:.92}
+  .btn-p:disabled{opacity:.45;cursor:default}
+  .btn-gr{
+    padding:clamp(11px,1.8vw,13px);
+    background:linear-gradient(135deg,#059669,var(--green));
+    color:white;border:none;border-radius:10px;
+    font-family:'Nunito',sans-serif;font-size:clamp(13px,1.8vw,15px);
+    font-weight:800;cursor:pointer;width:100%;transition:.2s;
+  }
+
+  .lvl-done-banner{background:rgba(16,185,129,.1);border:1.5px solid rgba(16,185,129,.4);border-radius:var(--r);padding:clamp(12px,2vw,18px);text-align:center}
+  .lvl-done-banner .dbi{font-size:clamp(22px,3.5vw,30px);margin-bottom:6px}
+  .lvl-done-banner h3{font-size:clamp(13px,2vw,16px);font-weight:800;color:#065F46;margin-bottom:4px}
+  .lvl-done-banner p{font-size:clamp(11px,1.4vw,13px);color:#047857}
+
+  /* ════════════════════════ TOAST ════════════════════════ */
+  .toast{
+    position:fixed;top:20px;left:50%;
+    transform:translateX(-50%) translateY(-90px);
+    background:var(--blue);color:white;
+    padding:10px 20px;border-radius:10px;
+    font-size:clamp(11px,1.5vw,13px);font-weight:700;
+    transition:transform .3s;z-index:999;white-space:nowrap;max-width:90vw;
+    text-align:center;
+  }
+  .toast.sh{transform:translateX(-50%) translateY(0)}
+
+  /* ════════════════════════ RESPONSIVE BREAKPOINTS ════════════════════════ */
+
+  /* Tablet: centraliza y limita ancho */
+  @media(min-width:600px){
+    #app{max-width:600px;margin:0 auto;box-shadow:0 0 40px rgba(0,0,0,.12)}
+    .hdr{border-radius:0}
+  }
+
+  /* Desktop / Laptop: panel más amplio */
+  @media(min-width:900px){
+    #app{max-width:760px}
+    .sr{grid-template-columns:repeat(3,1fr)}
+    .rc{max-width:480px}
+    .cf{max-width:600px}
+  }
+
+  /* Wide desktop */
+  @media(min-width:1200px){
+    #app{max-width:860px}
+  }
+
+  /* Móvil pequeño: ajustes extra */
+  @media(max-width:380px){
+    .trow .tb{font-size:9px;padding:6px 2px}
+    .lif .ln3{font-size:12px}
+    .bbk{font-size:10px;padding:4px 8px}
+  }
+
+  /* Landscape móvil */
+  @media(max-height:500px) and (orientation:landscape){
+    .rw{padding:12px 16px}
+    .rc{padding:14px 20px}
+    .rt{margin-bottom:10px}
+    .fg{margin-bottom:8px}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="toast" id="toast"></div>
+
+  <!-- ══════════ REGISTRO ══════════ -->
+  <div class="screen active" id="sc-reg">
+    <div class="rw">
+      <div class="rc">
+        <div class="rt">
+          <div class="ri">🏦</div>
+          <h1>Educación Financiera</h1>
+          <p>Unidad Educativa "Sociedad, Educación y Renovación"</p>
+        </div>
+        <div class="gdv">— Registro de Estudiante —</div>
+        <div class="fg"><label>Apellidos y nombres completos</label><input type="text" id="rn" placeholder="INGRESA APELLIDOS Y NOMBRES"/></div>
+        <div class="fg"><label>Año / Grado</label><select id="rg">
+          <option value="">Selecciona tu grado...</option>
+          <option>5to Grado EGB</option><option>6to Grado EGB</option><option>7mo Grado EGB</option>
+          <option>8vo Grado EGB</option><option>9no Grado EGB</option><option>10mo Grado EGB</option>
+          <option>1ro Bachillerato</option><option>2do Bachillerato</option><option>3ro Bachillerato</option>
+        </select></div>
+        <div class="fg"><label>Paralelo</label><select id="rp">
+          <option value="">Selecciona...</option><option>A</option>
+        </select></div>
+        <button class="btn-reg" onclick="doReg()">🚀 Comenzar el Curso</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ MAIN ══════════ -->
+  <div class="screen" id="sc-main">
+    <div class="hdr">
+      <div class="lgo">
+        <div class="lgo-c">UESER</div>
+        <div class="lgo-t"><div class="li">Edu. Financiera</div><div class="ln" id="hn">Estudiante</div></div>
+      </div>
+      <div class="gbdg" id="hp">0%</div>
+    </div>
+
+    <!-- Dashboard tab -->
+    <div class="screen active" id="tab-dash" style="flex:1">
+      <div class="dash-wrap">
+        <div class="db">
+          <div class="wb">
+            <h2 id="wbg">¡Hola! 👋</h2>
+            <p>Completa teoría + ejercicios + trivia para avanzar</p>
+            <div class="pb">
+              <div class="pl"><span>Progreso total</span><span id="wbp">0%</span></div>
+              <div class="pw"><div class="pf" id="wbb" style="width:0%"></div></div>
+            </div>
+          </div>
+          <div class="sr">
+            <div class="sc"><div class="sv" id="std">0</div><div class="sl">Completados</div></div>
+            <div class="sc"><div class="sv" id="stc">0</div><div class="sl">En curso</div></div>
+            <div class="sc"><div class="sv">25</div><div class="sl">Total</div></div>
+          </div>
+          <div class="stl">Niveles del curso</div>
+          <div class="lg" id="lvl-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Diploma tab -->
+    <div class="screen" id="tab-cert" style="flex:1">
+      <div class="cw">
+        <!-- Locked overlay (shown when < 100%) -->
+        <div id="cert-locked-view" class="cert-locked">
+          <div class="cl-icon">🔒</div>
+          <h2>Diploma bloqueado</h2>
+          <p>Completa los 25 niveles del curso para desbloquear y descargar tu diploma oficial de la UESER.</p>
+          <div class="prog-label">
+            <span>Progreso actual</span><span id="lock-pct">0%</span>
+          </div>
+          <div class="prog-wrap">
+            <div class="prog-fill" id="lock-bar" style="width:0%"></div>
+          </div>
+        </div>
+
+        <!-- Certificate (shown when 100%) -->
+        <div id="cert-card-view" style="display:none;width:100%;display:none;flex-direction:column;align-items:center;gap:16px">
+          <div class="cf"><div class="ci">
+            <div class="ch">
+              <div class="ci2">UESER</div>
+              <div class="cif">Unidad Educativa "Sociedad, Educación y Renovación"</div>
+              <div class="cif">Playas – Ecuador</div>
+              <div class="clm">"La perseverancia conduce al éxito y la educación a la excelencia"</div>
+            </div>
+            <div class="cdv"></div>
+            <div class="ccf">Confiere el presente:</div>
+            <div class="ctt">Certificado de aprobacion del curso de Educacion Financiera</div>
+            <div class="ca">A:</div>
+            <div class="cnm" id="cnm">—</div>
+            <div class="cb">Por su excelente desempeño y haber Aprobado el Curso de Educación Financiera, constituyéndose este hecho en el máximo galardón que el Plantel otorga a los Estudiantes, como testimonio al esfuerzo y dedicación, que le han convertido en un ejemplo de superación.</div>
+            <div class="cdt" id="cdt">Playas, — de — del —</div>
+            <div class="css2">
+              <div class="csg"><div class="csl"></div><div class="csn">Prof. Sonia Mejia Asunción</div><div class="csr">Rectora</div></div>
+              <div class="csg"><div class="csl"></div><div class="csn">Ing. Milton Yagual Yagual</div><div class="csr">Administrador del Curso</div></div>
+            </div>
+          </div></div>
+          <button class="btn-dl" id="btn-dl" onclick="showToast('✅ Diploma descargado en PDF')">⬇ Descargar Diploma PDF</button>
+        </div>
+
+        <!-- Always-visible download button (disabled until 100%) -->
+        <div id="cert-dl-locked" style="width:100%;max-width:560px">
+          <button class="btn-dl" disabled id="btn-dl-locked">🔒 Completa el 100% para desbloquear el diploma</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav2">
+      <button class="nb ac" id="nb-dash" onclick="swTab('dash')"><span class="ni">🏠</span><span class="nl">Inicio</span></button>
+      <button class="nb" id="nb-cert" onclick="swTab('cert')"><span class="ni">🏆</span><span class="nl">Diploma</span></button>
+    </div>
+  </div>
+
+  <!-- ══════════ NIVEL ══════════ -->
+  <div class="screen" id="sc-lv">
+    <div class="lvhdr">
+      <div class="lhtp">
+        <button class="bbk" onclick="goBack()">← Volver</button>
+        <div class="ltb"><div class="ll" id="lvlbl">Nivel 1</div><div class="lt" id="lvttl">El Dinero</div></div>
+      </div>
+      <div class="trow">
+        <button class="tb ac" onclick="swLvTab('teoria',this)">📖 Teoría</button>
+        <button class="tb" onclick="swLvTab('ejercicio',this)">✏️ Ejercicios</button>
+        <button class="tb" onclick="swLvTab('trivia',this)">🎯 Trivia</button>
+      </div>
+    </div>
+    <div class="lc" id="lc"></div>
+  </div>
+</div>
+
+<script>
+const MESES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+const NV=[
+  {t:'El Dinero',s:'¿Qué es y para qué sirve?'},{t:'Necesidades y Deseos',s:'Aprende a diferenciarlos'},
+  {t:'El Presupuesto',s:'Planifica ingresos y gastos'},{t:'El Ahorro',s:'La clave del éxito financiero'},
+  {t:'Los Ingresos',s:'Fuentes de dinero'},{t:'Los Gastos',s:'Tipos y control'},
+  {t:'La Deuda',s:'Cuándo es buena o mala'},{t:'El Interés',s:'Cómo crece el dinero'},
+  {t:'El Banco',s:'Cómo funciona'},{t:'Inversión Básica',s:'Haz crecer tu dinero'},
+  {t:'Inflación',s:'Por qué sube el precio de todo'},{t:'Impuestos',s:'Para qué sirven'},
+  {t:'Emprendimiento',s:'Crea tu propio negocio'},{t:'Mercado y Comercio',s:'Cómo funciona la economía'},
+  {t:'Tarjeta de Crédito',s:'Úsala con sabiduría'},{t:'Seguros',s:'Protege lo que tienes'},
+  {t:'Jubilación',s:'Planifica tu futuro'},{t:'Bolsa de Valores',s:'Inversiones avanzadas'},
+  {t:'Criptomonedas',s:'Dinero digital'},{t:'Finanzas Familiares',s:'El hogar como empresa'},
+  {t:'Finanzas Digitales',s:'Pagos en línea seguros'},{t:'Metas Financieras',s:'Define y alcanza tus sueños'},
+  {t:'Plan de Vida',s:'Tu hoja de ruta financiera'},{t:'Ahorro e Inversión',s:'Combinación ganadora'},
+  {t:'Examen Final',s:'Demuestra todo lo aprendido'},
+];
+
+const TEORIAS=[
+  {i:'💰',t:'¿Qué es el dinero?',tx:'El dinero es un medio de intercambio aceptado por todos. Antes existía el trueque: cambiar una gallina por maíz. El dinero simplifica ese proceso. Tiene tres funciones: medio de pago, unidad de medida de valor, y reserva de valor.',an:'El dinero es como un "cupón universal" que puedes canjear por casi cualquier cosa.'},
+  {i:'🛒',t:'Necesidades vs. Deseos',tx:'Las necesidades son cosas que DEBEMOS tener para vivir: comida, ropa, educación, salud. Los deseos son cosas que NOS GUSTARÍA tener pero podemos vivir sin ellas: videojuegos, ropa de marca, dulces. Saber diferenciarlos es la base de finanzas inteligentes.',an:'Si no lo tuvieras, ¿podrías sobrevivir? Si la respuesta es sí, probablemente es un deseo.'},
+  {i:'📋',t:'El Presupuesto Personal',tx:'Un presupuesto es un plan donde anotas tus ingresos (dinero que entra) y tus gastos (dinero que sale). Si ingresos > gastos = superávit. Si gastos > ingresos = déficit. Hacer un presupuesto te da control total de tu dinero.',an:'Es como el menú del restaurante: decides qué "pedir" con tu dinero ANTES de gastarlo, no después.'},
+  {i:'🐷',t:'El Ahorro',tx:'Ahorrar significa guardar parte de tu dinero en lugar de gastarlo todo. El secreto es hacerlo apenas recibes tu dinero. El ahorro te permite cumplir metas, enfrentar emergencias y construir libertad financiera.',an:'Cada gota llena el océano. Si ahorras $1 diario, en un año tienes $365.'},
+  {i:'💼',t:'Los Ingresos',tx:'Los ingresos son todo el dinero que recibes. Hay ingresos activos (trabajas y te pagan) e ingresos pasivos (el dinero trabaja para ti: intereses, rentas, dividendos). Los ricos buscan más ingresos pasivos. Diversificar ingresos es clave.',an:'Tus ingresos son el agua que entra a tu balde. Más fuentes = balde más lleno.'},
+  {i:'🧾',t:'Los Gastos',tx:'Los gastos son el dinero que sale. Se dividen en fijos (siempre iguales) y variables (cambian cada mes). También en necesarios y superfluos. Controlar los gastos variables es donde más puedes ahorrar.',an:'Los gastos son el agujero en tu balde. Tapar los agujeros innecesarios mantiene el balde lleno.'},
+  {i:'💳',t:'La Deuda',tx:'La deuda es dinero que pides prestado y debes devolver con intereses. Hay deuda buena (te ayuda a generar más dinero) y deuda mala (financia consumo que pierde valor). Evita la deuda mala.',an:'La deuda mala es como un hueco: entre más la ignoras, más grande se vuelve.'},
+  {i:'📈',t:'El Interés',tx:'El interés es el costo de usar dinero prestado, o la ganancia de prestarlo. El interés compuesto suma el interés sobre el interés, haciendo crecer el dinero exponencialmente.',an:'El interés compuesto es como una bola de nieve: mientras más rueda, más grande se hace.'},
+  {i:'🏦',t:'El Banco',tx:'Los bancos guardan tu dinero, lo prestan a otros y cobran intereses. Con ese dinero te pagan un pequeño interés por tus ahorros. Los bancos también ofrecen créditos, tarjetas, seguros y otros servicios financieros.',an:'El banco es como una represa: recibe agua (depósitos) y la distribuye (préstamos) controladamente.'},
+  {i:'📊',t:'Inversión Básica',tx:'Invertir es poner tu dinero a trabajar para ganar más. Opciones básicas: cuentas de ahorro (bajo riesgo), bonos (medios), acciones (alto riesgo, alto rendimiento). La regla: a mayor rendimiento, mayor riesgo.',an:'Invertir es sembrar semillas. Algunas darán frutos pequeños pero seguros, otras podrían darte una cosecha enorme.'},
+  {i:'🔥',t:'La Inflación',tx:'La inflación es el aumento general de precios con el tiempo. Si la inflación es del 5%, algo que costaba $100 hoy vale $105 el próximo año. Por eso es importante invertir: el dinero guardado en casa pierde valor.',an:'La inflación es como un ladrón silencioso que reduce el poder de tu dinero sin que lo notes.'},
+  {i:'🏛️',t:'Los Impuestos',tx:'Los impuestos son contribuciones obligatorias que pagamos al Estado. Con ellos se pagan hospitales, escuelas, carreteras y servicios públicos. En Ecuador el IVA es del 15%.',an:'Los impuestos son la "cuota" de vivir en sociedad: todos aportan para que todos se beneficien.'},
+  {i:'🚀',t:'Emprendimiento',tx:'Emprender es crear un negocio propio. Requiere una idea, un plan de negocios, capital inicial, y mucha perseverancia. Los emprendedores identifican problemas y crean soluciones. El fracaso es parte del proceso.',an:'Emprender es como aprender a andar en bici: te caerás varias veces, pero cada caída te enseña algo nuevo.'},
+  {i:'🏪',t:'Mercado y Comercio',tx:'El mercado es donde compradores y vendedores intercambian bienes y servicios. La ley de oferta y demanda determina los precios: si mucha gente quiere algo escaso, sube el precio.',an:'El mercado es como una gran subasta: el precio lo fija lo que la gente quiere y lo que hay disponible.'},
+  {i:'💳',t:'Tarjeta de Crédito',tx:'La tarjeta de crédito te permite comprar ahora y pagar después. Si pagas el saldo completo cada mes, no hay intereses. Si solo pagas el mínimo, acumulas deuda con intereses muy altos.',an:'La tarjeta es una herramienta: puede construirte (si la usas bien) o destruirte (si pagas solo el mínimo).'},
+  {i:'🛡️',t:'Los Seguros',tx:'Un seguro es un contrato donde pagas una prima mensual para que, si ocurre un evento negativo, la aseguradora cubre los gastos. Son una protección financiera esencial.',an:'El seguro es como un paraguas: no esperas que llueva para comprarlo.'},
+  {i:'👴',t:'La Jubilación',tx:'La jubilación es cuando dejas de trabajar y vives de tus ahorros e inversiones. En Ecuador el IESS gestiona las pensiones, pero no siempre son suficientes. Por eso es crucial ahorrar desde joven.',an:'La jubilación es como el examen final de tu vida financiera: si estudias (ahorras) toda tu vida, lo pasas con facilidad.'},
+  {i:'📉',t:'Bolsa de Valores',tx:'La bolsa es un mercado donde se compran y venden acciones de empresas. Al comprar acciones te conviertes en dueño de una parte de esa empresa. Si la empresa gana, tus acciones suben.',an:'Comprar acciones es como ser socio de una empresa: ganas cuando le va bien y pierdes cuando le va mal.'},
+  {i:'₿',t:'Criptomonedas',tx:'Las criptomonedas son monedas digitales que usan tecnología blockchain. Son descentralizadas y muy volátiles: pueden subir o bajar 50% en días. No son para principiantes.',an:'Las cripto son como el oro digital: escasas, valiosas para algunos, pero sin respaldo de ningún gobierno.'},
+  {i:'🏠',t:'Finanzas Familiares',tx:'El hogar funciona como una pequeña empresa. Tiene ingresos, gastos, activos y pasivos. Un presupuesto familiar escrito y revisado mensualmente puede transformar la economía del hogar.',an:'Tu familia es una empresa pequeña: necesita un gerente financiero. ¿Quién será ese rol en tu hogar?'},
+  {i:'📱',t:'Finanzas Digitales',tx:'Hoy podemos hacer casi todo por internet: transferencias, pagos, inversiones. Pero cuidado: el fraude digital existe. Nunca compartas claves, verifica siempre las URLs y usa redes seguras.',an:'Hacer banca digital es conveniente, pero como cruzar una calle: hay que mirar a los dos lados antes.'},
+  {i:'🎯',t:'Metas Financieras',tx:'Una meta financiera SMART es: Específica, Medible, Alcanzable, Relevante y Temporal. Sin metas claras, el dinero simplemente desaparece.',an:'Las metas son como el GPS: sin destino definido, conduces sin rumbo y gastas combustible en vano.'},
+  {i:'🗺️',t:'Plan de Vida Financiero',tx:'Un plan de vida financiero es tu hoja de ruta para los próximos años. Define dónde quieres estar en 1, 5 y 10 años. Incluye metas de ahorro, inversión, educación y retiro.',an:'Tu plan financiero es el plano de tu casa: sin él construyes sin orden y el resultado es un caos.'},
+  {i:'⚖️',t:'Ahorro e Inversión',tx:'Ahorrar y invertir son complementarios. El ahorro es la base segura. La inversión hace crecer el dinero a largo plazo. Primero un fondo de emergencia (3-6 meses de gastos), luego invierte el excedente.',an:'El ahorro es la red de seguridad del trapecista. La inversión es el salto al siguiente trapecio.'},
+  {i:'🏆',t:'Repaso y Examen Final',tx:'¡Llegaste al nivel final! Has aprendido sobre dinero, presupuesto, ahorro, inversión, crédito, impuestos, emprendimiento y planificación financiera. Estos conocimientos son herramientas poderosas para construir tu libertad económica.',an:'La educación financiera no te hace rico automáticamente, pero sí te da el mapa para encontrar el camino.'},
+];
+
+const EJS=[
+  [{p:'Calcula el balance mensual',d:'Propina: $5/semana × 4 = $20. Gastos: recreación $8 + útiles $6 = $14',c:'Balance = $20 − $14 = $6 (superávit)'},{p:'¿Qué pasa si gastas $22?',d:'Ingresos $20 − Gastos $22',c:'Balance = −$2 (déficit)'}],
+  [{p:'Clasifica estos gastos',d:'Zapatos de fútbol ($30): DESEO. Cuadernos ($8): NECESIDAD.',c:'Necesidades: $8 | Deseos: $30'},{p:'Tienes $18, ¿en qué ordenas gastar?',d:'Primero necesidades, luego deseos',c:'$8 necesidades → quedan $10'}],
+  [{p:'Crea un presupuesto con $50/mes',d:'Regla 50/30/20: Necesidades 50%, Deseos 30%, Ahorro 20%',c:'Necesidades:$25 | Deseos:$15 | Ahorro:$10'},{p:'¿Cuánto ahorras en 6 meses?',d:'$10/mes × 6 meses',c:'Total ahorrado = $60'}],
+  [{p:'¿Cuántos días para ahorrar $45?',d:'Ahorras $3 diarios',c:'45 ÷ 3 = 15 días'},{p:'Propina $8/semana, ahorra 25%',d:'$8 × 0.25',c:'$2/semana → en 1 año: $104'}],
+  [{p:'Suma tus ingresos del mes',d:'Mesada: $20, Trabajo: $15, Premio: $10',c:'Total = $45/mes'},{p:'¿Cuánto ganas por hora si trabajas 5h?',d:'$15 ÷ 5',c:'= $3/hora'}],
+  [{p:'Gastos fijos vs variables',d:'Arriendo $200 (fijo), Ocio $50 (variable)',c:'Fijos:$200 | Variables:$50'},{p:'Reduces ocio 50%',d:'$50 × 0.5',c:'Ahorras $25 extra/mes'}],
+  [{p:'Deuda buena vs mala',d:'Préstamo para artesanías: BUENA. Tarjeta por ropa: MALA.',c:'Deuda buena genera dinero. Mala lo consume.'},{p:'Deuda $200 al 20% anual',d:'$200 × 0.20',c:'Interés = $40 → Total $240'}],
+  [{p:'Interés simple: $500 al 8%',d:'$500 × 0.08',c:'Interés = $40 → Total: $540'},{p:'Interés compuesto año 2',d:'$540 × 0.08',c:'= $43.20 → Total: $583.20'}],
+  [{p:'Depósito bancario',d:'$1,000 al 5% anual',c:'Interés = $50'},{p:'Banco vs colchón',d:'Colchón: $1,000 estático. Banco: $1,050',c:'$50 a favor del banco ✓'}],
+  [{p:'$200 en cuenta al 4%',d:'$200 × 0.04',c:'Ganancia = $8/año'},{p:'Riesgo vs rendimiento',d:'Ahorro: 4% seguro. Acciones: +30% o −20%',c:'A mayor riesgo, mayor posible ganancia'}],
+  [{p:'Inflación 6% sobre $100',d:'$100 ÷ 1.06',c:'= $94.34 de poder de compra'},{p:'¿Qué inversión supera inflación 6%?',d:'A: 4%. B: 9%.',c:'Elige B: +3% real de ganancia'}],
+  [{p:'IVA de una compra',d:'Producto: $80. IVA: 15%',c:'IVA = $12 → Total = $92'},{p:'Precio sin IVA de $46',d:'$46 ÷ 1.15',c:'= $40 sin IVA | IVA = $6'}],
+  [{p:'Ganancia de limonadas',d:'Precio $1, costo $0.30, 50 vasos',c:'Ingreso=$50 | Costo=$15 | Ganancia=$35'},{p:'¿Cuántas vender para ganar $20?',d:'Ganancia por vaso = $0.70',c:'$20 ÷ $0.70 ≈ 29 vasos'}],
+  [{p:'Oferta y demanda',d:'5 pelotas, 20 niños → precio SUBE.',c:'Escasez + demanda alta = precio alto'},{p:'Jugo sube de $1 a $1.50',d:'(1.50−1) ÷ 1 × 100',c:'= 50% de aumento'}],
+  [{p:'Solo el mínimo de tarjeta',d:'Deuda $500, interés 24% anual',c:'Podrías pagar el doble en intereses'},{p:'Límite $1,000, usaste $650',d:'$1,000 − $650',c:'= $350 de crédito disponible'}],
+  [{p:'Prima del seguro',d:'Celular: $5/mes = $60/año. Reparación: $300.',c:'$60 vs $300 de riesgo → vale la pena'},{p:'Seguro de salud',d:'Prima $30/mes = $360/año. Consulta $80 c/u.',c:'5 consultas: $400−$360 = $40 ahorrado'}],
+  [{p:'¿Cuánto necesitas al jubilarte?',d:'$800/mes × 12 × 20 años',c:'= $192,000 necesitas'},{p:'Ahorra $150/mes por 30 años',d:'$150 × 12 × 30',c:'= $54,000 aportado + intereses'}],
+  [{p:'Ganancia de acciones',d:'10 acciones a $5 vendidas a $8',c:'Ganancia = (8−5) × 10 = $30'},{p:'Rendimiento %',d:'$30 ÷ $50 × 100',c:'= 60% de rendimiento'}],
+  [{p:'Bitcoin sube 40%',d:'$100 × 1.40',c:'= $140 (ganancia de $40)'},{p:'Luego baja 30%',d:'$140 × 0.70',c:'= $98 (perdiste $2 del total original)'}],
+  [{p:'Presupuesto familiar',d:'Ingresos $2,000, esenciales $1,200, ocio $300',c:'$2,000 − $1,500 = $500 para ahorro'},{p:'% del ingreso ahorrado',d:'$500 ÷ $2,000 × 100',c:'= 25%'}],
+  [{p:'Detecta estafa digital',d:'Te dicen que ganaste $500 pero debes pagar $50 primero.',c:'ESTAFA: nadie paga para recibir un premio real'},{p:'Comisión de transferencia',d:'$200 × 0.015',c:'= $3 de comisión → recibes $197'}],
+  [{p:'Meta SMART de ahorro',d:'Meta: $360 para bicicleta en 12 meses',c:'$360 ÷ 12 = $30/mes'},{p:'Con $45/mes, ¿en cuántos meses?',d:'$360 ÷ $45',c:'= 8 meses (4 menos que el plan)'}],
+  [{p:'Plan a 5 años',d:'Meta $5,000 en 5 años',c:'$5,000 ÷ 60 meses = $83.33/mes'},{p:'Con inversión al 8%',d:'El interés compuesto trabaja por ti',c:'Podrías necesitar solo ~$68/mes'}],
+  [{p:'Combina ahorro e inversión',d:'Disponible: $120/mes → $60 ahorro + $60 inversión',c:'En 1 año: $720 seguro + rendimiento'},{p:'$60/mes al 8% en 10 años',d:'vs $60/mes al 0%',c:'$10,900 vs $7,200 → $3,700 extra'}],
+  [{p:'Patrimonio neto',d:'Activos $63k − Deudas $20k',c:'Patrimonio neto = $43,000'},{p:'¿Mejoró este año?',d:'Antes $38k, ahora $43k',c:'Mejora = $5,000 más rico ✓'}],
+];
+
+const TRV=[
+  {qs:[{t:'mc',q:'¿Cuál es la función principal del dinero?',ops:['Decorar las casas','Servir de medio de intercambio','Ser coleccionado','Fabricarse en casa'],r:1},{t:'mc',q:'¿Cómo intercambiaban bienes antes del dinero?',ops:['Con tarjetas de crédito','Con cheques','Con trueque','Con criptomonedas'],r:2},{t:'ex',q:'Tienes $15 y gastas $9. ¿Cuánto te queda?',ans:'6',hint:'$15 − $9 = ?'},{t:'mc',q:'¿El dinero tiene valor porque...?',ops:['Es dorado','Todos lo aceptamos como pago','Lo hace el gobierno','Pesa mucho'],r:1},{t:'ex',q:'Ganas $5 el lunes y $8 el miércoles. ¿Total?',ans:'13',hint:'$5 + $8 = ?'}]},
+  {qs:[{t:'mc',q:'¿Cuál es una NECESIDAD básica?',ops:['Videojuego','Zapatillas de marca','Alimentación diaria','Netflix'],r:2},{t:'mc',q:'¿Cuál es un DESEO?',ops:['Ropa de abrigo','Cuadernos escolares','Consola de videojuegos','Medicamentos'],r:2},{t:'ex',q:'Tienes $20. Necesidades cuestan $12. ¿Queda para deseos?',ans:'8',hint:'$20 − $12 = ?'},{t:'mc',q:'La comida diaria es una...',ops:['Lujo','Deseo especial','Necesidad básica','Inversión'],r:2},{t:'ex',q:'3 deseos cuestan $7, $4 y $5. ¿Cuánto suman?',ans:'16',hint:'$7 + $4 + $5 = ?'}]},
+  {qs:[{t:'mc',q:'¿Qué es un presupuesto?',ops:['Una deuda','Un plan de ingresos y gastos','Un tipo de banco','Un impuesto'],r:1},{t:'ex',q:'Ingresos $80, gastos $65. ¿Balance?',ans:'15',hint:'$80 − $65 = ?'},{t:'mc',q:'Gastas más de lo que ganas: tienes un...',ops:['Superávit','Premio','Déficit','Bono'],r:2},{t:'ex',q:'Regla 50/30/20: ¿cuánto ahorras de $100?',ans:'20',hint:'$100 × 20% = ?'},{t:'mc',q:'Un presupuesto sirve para...',ops:['Pedir préstamos','Planificar gastos anticipadamente','Pagar impuestos','Invertir en bolsa'],r:1}]},
+  {qs:[{t:'mc',q:'¿Qué significa ahorrar?',ops:['Gastar todo','Guardar parte para el futuro','Pedir prestado','Invertir en cripto'],r:1},{t:'ex',q:'Ahorras $8/semana. ¿Cuánto en 4 semanas?',ans:'32',hint:'$8 × 4 = ?'},{t:'mc',q:'¿Para qué sirve el fondo de emergencias?',ops:['Para lujos','Para gastos inesperados','Para vacaciones','Para invertir'],r:1},{t:'ex',q:'Tienes $50 y ahorras el 20%. ¿Cuánto ahorras?',ans:'10',hint:'$50 × 0.20 = ?'},{t:'mc',q:'El primer paso para ahorrar es...',ops:['Abrir una cuenta','Pedir un préstamo','Definir una meta','Comprar acciones'],r:2}]},
+  {qs:[{t:'mc',q:'¿Cuál es un ingreso pasivo?',ops:['Salario mensual','Horas extras','Intereses de ahorros','Propina'],r:2},{t:'ex',q:'Mesada $20 + trabajo extra $12. ¿Total?',ans:'32',hint:'$20 + $12 = ?'},{t:'mc',q:'Diversificar ingresos significa...',ops:['Gastar en varias cosas','Tener varias fuentes de dinero','Ahorrar en diferentes bancos','Invertir en cripto'],r:1},{t:'ex',q:'Ganas $35 y gastas $28. ¿Cuánto puedes invertir?',ans:'7',hint:'$35 − $28 = ?'},{t:'mc',q:'El ingreso activo depende de...',ops:['El banco','Tu trabajo y tiempo','El gobierno','Las inversiones'],r:1}]},
+  {qs:[{t:'mc',q:'Los gastos fijos son...',ops:['Los que cambian cada mes','Los que siempre son iguales','Solo los de comida','Los de entretenimiento'],r:1},{t:'ex',q:'Gastos fijos $120 + variables $80. ¿Total?',ans:'200',hint:'$120 + $80 = ?'},{t:'mc',q:'¿Dónde puedes recortar más fácilmente?',ops:['En gastos fijos','En el arriendo','En gastos variables','En impuestos'],r:2},{t:'ex',q:'Reduces tu ocio de $60 a $35. ¿Cuánto ahorras?',ans:'25',hint:'$60 − $35 = ?'},{t:'mc',q:'Un gasto superfluo es...',ops:['El arriendo','La alimentación','Una suscripción que no usas','La educación'],r:2}]},
+  {qs:[{t:'mc',q:'¿Qué es la deuda buena?',ops:['Deuda por ropa','Deuda para generar más ingresos','Deuda de tarjeta','Deuda por viajes'],r:1},{t:'ex',q:'Deuda $300 al 10% anual. ¿Cuánto de interés?',ans:'30',hint:'$300 × 0.10 = ?'},{t:'mc',q:'¿Cuál es la peor deuda?',ops:['Hipoteca','Préstamo para negocio','Deuda de tarjeta sin pagar','Crédito estudiantil'],r:2},{t:'ex',q:'Deuda $500, pagas $150. ¿Cuánto queda?',ans:'350',hint:'$500 − $150 = ?'},{t:'mc',q:'La deuda mala financia...',ops:['Negocios productivos','Educación','Consumo que pierde valor','Inversiones'],r:2}]},
+  {qs:[{t:'mc',q:'¿Qué es el interés compuesto?',ops:['Interés sobre capital inicial solo','Interés sobre capital + interés acumulado','Un tipo de banco','Un impuesto'],r:1},{t:'ex',q:'$200 al 5% de interés simple. ¿Cuánto de interés?',ans:'10',hint:'$200 × 0.05 = ?'},{t:'mc',q:'El interés compuesto favorece...',ops:['A los deudores','A los que ahorran a largo plazo','Solo a los bancos','A quien pide préstamos'],r:1},{t:'ex',q:'$105 × 5%. ¿Cuánto de interés?',ans:'5.25',hint:'$105 × 0.05 = ?'},{t:'mc',q:'A mayor tiempo, el interés compuesto...',ops:['Disminuye','Se mantiene igual','Crece exponencialmente','Desaparece'],r:2}]},
+  {qs:[{t:'mc',q:'¿Qué hace un banco con tu dinero?',ops:['Lo guarda sin usarlo','Lo presta a otros y te paga intereses','Lo invierte en bolsa','Lo convierte en cripto'],r:1},{t:'ex',q:'Depositas $800 al 3% anual. ¿Cuánto interés?',ans:'24',hint:'$800 × 0.03 = ?'},{t:'mc',q:'El banco es un...',ops:['Tienda de dinero','Intermediario financiero','Organismo del gobierno','Bolsa de valores'],r:1},{t:'ex',q:'Préstamo $1,000 al 12% anual. ¿Interés 1er año?',ans:'120',hint:'$1,000 × 0.12 = ?'},{t:'mc',q:'¿Qué es más seguro para guardar dinero?',ops:['Bajo el colchón','En el banco','En cripto','En acciones'],r:1}]},
+  {qs:[{t:'mc',q:'A mayor riesgo en inversión...',ops:['Menor posible rendimiento','Mayor posible rendimiento','Mismo rendimiento siempre','Sin posibles ganancias'],r:1},{t:'ex',q:'Inviertes $500 al 8%. ¿Cuánto ganas?',ans:'40',hint:'$500 × 0.08 = ?'},{t:'mc',q:'¿Cuál inversión es más segura?',ops:['Acciones nueva empresa','Criptomonedas','Cuenta de ahorro bancaria','Préstamos a amigos'],r:2},{t:'ex',q:'Inversión $1,000 creció a $1,150. ¿Cuánto ganaste?',ans:'150',hint:'$1,150 − $1,000 = ?'},{t:'mc',q:'Para invertir, lo primero es...',ops:['Pedir un préstamo','Tener un fondo de emergencia','Comprar acciones de moda','Invertir en cripto'],r:1}]},
+  {qs:[{t:'mc',q:'La inflación significa que...',ops:['Los precios bajan','Los precios suben generalmente','El dinero vale más','Hay más empleo'],r:1},{t:'ex',q:'Algo costaba $50. Inflación 10%. ¿Cuánto cuesta?',ans:'55',hint:'$50 × 1.10 = ?'},{t:'mc',q:'Si inflación es 6% y tu inversión rinde 4%...',ops:['Ganaste dinero real','Perdiste poder adquisitivo','Empataste','El banco te debe'],r:1},{t:'ex',q:'Inflación 8%. $200 en casa. ¿Cuánto poder perdiste?',ans:'16',hint:'$200 × 0.08 = ?'},{t:'mc',q:'El mejor escudo contra la inflación es...',ops:['Guardar efectivo','Invertir con rendimiento mayor a la inflación','No gastar nada','Cambiar a dólares'],r:1}]},
+  {qs:[{t:'mc',q:'¿Para qué sirven los impuestos?',ops:['Para enriquecer a políticos','Para financiar servicios públicos','Para controlar el gasto','Para premiar a empresas'],r:1},{t:'ex',q:'Producto $60. IVA 15%. ¿Cuánto de IVA?',ans:'9',hint:'$60 × 0.15 = ?'},{t:'mc',q:'El IVA en Ecuador es del...',ops:['10%','12%','15%','20%'],r:2},{t:'ex',q:'Precio con IVA: $115. ¿Precio sin IVA? (IVA=15%)',ans:'100',hint:'$115 ÷ 1.15 = ?'},{t:'mc',q:'Pagar impuestos es...',ops:['Opcional','Un deber ciudadano obligatorio','Solo para ricos','Solo para empresas'],r:1}]},
+  {qs:[{t:'mc',q:'El primer paso para emprender es...',ops:['Pedir un préstamo grande','Identificar un problema que resolver','Comprar equipos','Renunciar al trabajo'],r:1},{t:'ex',q:'Galleta a $2, costo $0.80. ¿Ganancia?',ans:'1.2',hint:'$2.00 − $0.80 = ?'},{t:'mc',q:'El fracaso en el emprendimiento es...',ops:['El fin del camino','Normal y fuente de aprendizaje','Señal de que no sirves','Algo que evitar'],r:1},{t:'ex',q:'30 galletas a $2. Costo total $24. ¿Ganancia?',ans:'36',hint:'(30×$2) − $24 = ?'},{t:'mc',q:'Un plan de negocios incluye...',ops:['Solo el nombre','Idea, costos, clientes y proyección','Solo cuánto ganar','Solo el logo'],r:1}]},
+  {qs:[{t:'mc',q:'Si muchos quieren algo escaso, el precio...',ops:['Baja','Se mantiene igual','Sube','Desaparece'],r:2},{t:'ex',q:'Jugo costaba $1. Subió 50%. ¿Cuánto cuesta?',ans:'1.5',hint:'$1 × 1.50 = ?'},{t:'mc',q:'Si el precio sube, la gente...',ops:['Compra más','Compra menos','No cambia nada','Cierra tiendas'],r:1},{t:'ex',q:'Tenías 20 manzanas, vendiste 13. ¿Cuántas quedan?',ans:'7',hint:'20 − 13 = ?'},{t:'mc',q:'¿Qué fija el precio en un mercado libre?',ops:['El gobierno','La oferta y la demanda','Los vendedores solos','Los compradores solos'],r:1}]},
+  {qs:[{t:'mc',q:'Si pagas el saldo completo de tu tarjeta...',ops:['Pagas mucho interés','No pagas intereses','El banco te cobra igual','Tu crédito baja'],r:1},{t:'ex',q:'Deuda $400. Interés mensual 2%. ¿Cuánto?',ans:'8',hint:'$400 × 0.02 = ?'},{t:'mc',q:'Pagar solo el mínimo es...',ops:['La mejor estrategia','Neutral','Muy costoso a largo plazo','Lo que recomienda el banco'],r:2},{t:'ex',q:'Límite $1,000. Usaste $650. ¿Crédito disponible?',ans:'350',hint:'$1,000 − $650 = ?'},{t:'mc',q:'La tarjeta de crédito es...',ops:['Siempre peligrosa','Siempre buena','Útil si se usa responsablemente','Igual que el efectivo'],r:2}]},
+  {qs:[{t:'mc',q:'¿Qué es una prima de seguro?',ops:['El premio del seguro','El pago mensual al seguro','El valor asegurado','El deducible'],r:1},{t:'ex',q:'Pagas $25/mes de seguro. ¿Cuánto en un año?',ans:'300',hint:'$25 × 12 = ?'},{t:'mc',q:'¿Cuándo conviene tener seguro?',ops:['Nunca','Cuando el riesgo supera el costo','Solo si eres rico','Solo para autos'],r:1},{t:'ex',q:'Seguro $400/año. Cubre $3,000. ¿Cuántas veces cubre?',ans:'7.5',hint:'$3,000 ÷ $400 = ?'},{t:'mc',q:'Un seguro de vida protege...',ops:['Tu auto','Tu celular','A tu familia si falleces','Tu cuenta bancaria'],r:2}]},
+  {qs:[{t:'mc',q:'¿Por qué ahorrar desde joven para el retiro?',ops:['No es necesario','Por el interés compuesto a largo plazo','Para impresionar al banco','Por obligación legal'],r:1},{t:'ex',q:'Ahorras $100/mes por 30 años. ¿Total aportado?',ans:'36000',hint:'$100 × 12 × 30 = ?'},{t:'mc',q:'El IESS en Ecuador gestiona...',ops:['Las tarjetas de crédito','Las pensiones de jubilación','Los impuestos','Las criptomonedas'],r:1},{t:'ex',q:'Necesitas $150,000 en 25 años. ¿Cuánto ahorrar/mes?',ans:'500',hint:'$150,000 ÷ (25×12) = ?'},{t:'mc',q:'El mejor momento para ahorrar para el retiro es...',ops:['A los 50 años','A los 40 años','Lo antes posible','Cuando tengas mucho dinero'],r:2}]},
+  {qs:[{t:'mc',q:'Comprar acciones significa...',ops:['Prestar dinero a una empresa','Ser dueño de parte de una empresa','Depositar en un banco','Comprar deuda pública'],r:1},{t:'ex',q:'Compras 5 acciones a $12. ¿Cuánto invertiste?',ans:'60',hint:'5 × $12 = ?'},{t:'mc',q:'Acción sube de $10 a $14. El rendimiento es...',ops:['30%','40%','50%','20%'],r:1},{t:'ex',q:'Vendiste 8 acciones a $15, compraste a $10. ¿Ganancia?',ans:'40',hint:'(15−10) × 8 = ?'},{t:'mc',q:'La bolsa de valores es para...',ops:['Quienes toleran riesgos','Solo millonarios','Solo el gobierno','Solo bancos'],r:0}]},
+  {qs:[{t:'mc',q:'Las criptomonedas son...',ops:['Monedas respaldadas por oro','Monedas digitales descentralizadas','Monedas del gobierno','Monedas del banco central'],r:1},{t:'ex',q:'Compras $50 en Bitcoin. Sube 60%. ¿Cuánto vale?',ans:'80',hint:'$50 × 1.60 = ?'},{t:'mc',q:'Las cripto son muy...',ops:['Estables','Seguras','Volátiles','Baratas'],r:2},{t:'ex',q:'$200 en cripto baja 40%. ¿Cuánto queda?',ans:'120',hint:'$200 × 0.60 = ?'},{t:'mc',q:'Bitcoin fue creado en...',ops:['1999','2005','2009','2015'],r:2}]},
+  {qs:[{t:'mc',q:'El hogar es como empresa porque...',ops:['Tiene empleados','Tiene ingresos, gastos, activos y deudas','Paga IVA','Tiene accionistas'],r:1},{t:'ex',q:'Ingresos $2,500. Gastos $1,900. ¿Cuánto ahorran?',ans:'600',hint:'$2,500 − $1,900 = ?'},{t:'mc',q:'El presupuesto familiar debe revisarse...',ops:['Una vez en la vida','Cada año','Mensualmente','Cada 5 años'],r:2},{t:'ex',q:'Gasto $375 sobre ingreso $2,500. ¿Qué %?',ans:'15',hint:'375 ÷ 2500 × 100 = ?'},{t:'mc',q:'Un activo familiar es...',ops:['Una deuda','La hipoteca','La casa que posees','Los gastos fijos'],r:2}]},
+  {qs:[{t:'mc',q:'¿Cuál es una señal de estafa digital?',ops:['El banco te pide actualizar datos por su app oficial','Recibes un "premio" y debes pagar primero','Tu banco te llama para darte un regalo','Recibes estado de cuenta por email'],r:1},{t:'ex',q:'Transfieres $350. Comisión 0.5%. ¿Cuánto?',ans:'1.75',hint:'$350 × 0.005 = ?'},{t:'mc',q:'Para proteger cuentas digitales debes...',ops:['Compartir clave con familiares','Usar la misma clave en todo','Usar claves únicas y fuertes','Guardar claves en notas'],r:2},{t:'ex',q:'Compras $120 online, descuento 15%. ¿Cuánto pagas?',ans:'102',hint:'$120 × 0.85 = ?'},{t:'mc',q:'Una URL segura empieza con...',ops:['http://','ftp://','https://','www.fake'],r:2}]},
+  {qs:[{t:'mc',q:'Una meta SMART debe ser...',ops:['Solo grande y ambiciosa','Específica, medible, alcanzable, relevante y temporal','Indefinida en el tiempo','Solo de ahorro'],r:1},{t:'ex',q:'Meta $480 en 8 meses. ¿Cuánto ahorrar/mes?',ans:'60',hint:'$480 ÷ 8 = ?'},{t:'mc',q:'Sin metas financieras el dinero...',ops:['Se multiplica solo','Se invierte automáticamente','Tiende a desaparecer','Se ahorra por instinto'],r:2},{t:'ex',q:'Ahorra $45/mes. ¿En cuántos meses llegas a $360?',ans:'8',hint:'$360 ÷ $45 = ?'},{t:'mc',q:'Una meta financiera debe revisarse...',ops:['Nunca','Solo si falla','Regularmente','Solo al alcanzarla'],r:2}]},
+  {qs:[{t:'mc',q:'Un plan financiero de vida se revisa...',ops:['Una sola vez','Cada 10 años','Anualmente como mínimo','Solo cuando hay crisis'],r:2},{t:'ex',q:'Meta $24,000 en 10 años. ¿Cuánto/mes?',ans:'200',hint:'$24,000 ÷ 120 = ?'},{t:'mc',q:'El plan financiero incluye metas para...',ops:['Solo el corto plazo','Solo el largo plazo','Corto, mediano y largo plazo','Solo inversiones'],r:2},{t:'ex',q:'Ahorro $150 + inversión $75. ¿Total al futuro?',ans:'225',hint:'$150 + $75 = ?'},{t:'mc',q:'Lo primero en cualquier plan financiero es...',ops:['Invertir en bolsa','Comprar seguros','Crear un fondo de emergencia','Pedir un crédito'],r:2}]},
+  {qs:[{t:'mc',q:'¿Cuál es la combinación ideal?',ops:['Solo ahorrar','Solo invertir','Ahorrar para emergencias e invertir el excedente','Gastar todo hoy'],r:2},{t:'ex',q:'Ingresos $600, gastos $420. Ahorra 50% del resto. ¿Cuánto?',ans:'90',hint:'(600−420) × 0.5 = ?'},{t:'mc',q:'El fondo de emergencia debe cubrir...',ops:['1-2 semanas','1 mes','3-6 meses','1-2 años'],r:2},{t:'ex',q:'Gastos $800/mes. Quieres 4 meses de emergencia. ¿Cuánto?',ans:'3200',hint:'$800 × 4 = ?'},{t:'mc',q:'La educación financiera es importante porque...',ops:['Garantiza hacerte rico','Te da herramientas para mejores decisiones','Es obligatoria por ley','Solo sirve para adultos'],r:1}]},
+];
+
+let S={
+  nombre:'',
+  levels:Array(25).fill(null).map((_,i)=>({
+    st:i===0?'active':'locked',
+    teoriaOk:false,ejercicioOk:false,triviaOk:false,
+    triviaAnswers:{},triviaSubmitted:false,triviaScore:null,exInputs:{}
+  })),
+  curLv:0,curTab:'teoria',prog:0
+};
+
+function calcProg(){
+  const done=S.levels.filter(l=>l.st==='completed').length;
+  S.prog=done*4;return S.prog;
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('sh');
+  setTimeout(()=>t.classList.remove('sh'),2800);
+}
+
+function goSc(id){
+  document.querySelectorAll('#app>.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sc-'+id).classList.add('active');
+}
+
+function swTab(t){
+  document.querySelectorAll('#sc-main .screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('ac'));
+  document.getElementById('nb-'+t).classList.add('ac');
+  if(t==='cert') updateCertView();
+}
+
+function updateCertView(){
+  const pct=S.prog;
+  const locked=document.getElementById('cert-locked-view');
+  const card=document.getElementById('cert-card-view');
+  const dlLocked=document.getElementById('cert-dl-locked');
+
+  // Update lock screen progress
+  document.getElementById('lock-pct').textContent=pct+'%';
+  document.getElementById('lock-bar').style.width=pct+'%';
+
+  if(pct>=100){
+    // Show certificate, hide lock screen
+    locked.style.display='none';
+    card.style.display='flex';
+    dlLocked.style.display='none';
+  } else {
+    // Show lock screen and disabled button
+    locked.style.display='block';
+    card.style.display='none';
+    dlLocked.style.display='block';
+    document.getElementById('btn-dl-locked').textContent=
+      '🔒 Completa el 100% para desbloquear el diploma ('+pct+'% completado)';
+  }
+}
+
+function doReg(){
+  const n=document.getElementById('rn').value.trim();
+  const g=document.getElementById('rg').value;
+  const p=document.getElementById('rp').value;
+  if(!n||!g||!p){showToast('⚠️ Completa todos los campos');return;}
+  S.nombre=n;
+  document.getElementById('hn').textContent=n.split(' ')[0];
+  document.getElementById('wbg').textContent='¡Hola, '+n.split(' ')[0]+'! 👋';
+  document.getElementById('cnm').textContent=n;
+  renderLevels();updProg();goSc('main');
+}
+
+function renderLevels(){
+  const list=document.getElementById('lvl-list');
+  list.innerHTML='';
+  S.levels.forEach((lv,i)=>{
+    const cls=lv.st==='completed'?'cm':lv.st==='active'?'al':'lk';
+    const nc=lv.st==='completed'?'d':lv.st==='active'?'a':'l';
+    const bc=lv.st==='completed'?'d':lv.st==='active'?'a':'l';
+    const bt=lv.st==='completed'?'✓ Completo':lv.st==='active'?'▶ Activo':'🔒';
+    const oc=lv.st!=='locked'?`openLv(${i})`:'';
+    const steps=[];
+    if(lv.teoriaOk)steps.push('📖');
+    if(lv.ejercicioOk)steps.push('✏️');
+    if(lv.triviaOk)steps.push('🎯');
+    list.innerHTML+=`<div class="li2 ${cls}" onclick="${oc}">
+      <div class="ln2 ${nc}">${i+1}</div>
+      <div class="lif"><div class="ln3">${NV[i].t}</div><div class="ls">${steps.length?steps.join(' ')+' &nbsp;':''}${NV[i].s}</div></div>
+      <span class="bdg ${bc}">${bt}</span>
+    </div>`;
+  });
+}
+
+function updProg(){
+  const pct=calcProg();
+  const done=S.levels.filter(l=>l.st==='completed').length;
+  const active=S.levels.filter(l=>l.st==='active').length;
+  document.getElementById('hp').textContent=pct+'%';
+  document.getElementById('wbp').textContent=pct+'%';
+  document.getElementById('wbb').style.width=pct+'%';
+  document.getElementById('std').textContent=done;
+  document.getElementById('stc').textContent=active;
+
+  if(pct>=100){
+    const now=new Date();
+    document.getElementById('cdt').textContent='Playas, '+now.getDate()+' de '+MESES[now.getMonth()]+' del '+now.getFullYear();
+    showToast('🎓 ¡Felicidades! Tu diploma está listo — ve a la pestaña Diploma');
+  }
+  // If diploma tab is visible, refresh it
+  if(document.getElementById('tab-cert').classList.contains('active')) updateCertView();
+}
+
+function openLv(idx){
+  S.curLv=idx;S.curTab='teoria';
+  document.getElementById('lvlbl').textContent='Nivel '+(idx+1);
+  document.getElementById('lvttl').textContent=NV[idx].t;
+  document.querySelectorAll('.tb').forEach((b,i)=>b.classList.toggle('ac',i===0));
+  renderContent('teoria');goSc('lv');
+}
+
+function swLvTab(tab,btn){
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('ac'));
+  btn.classList.add('ac');S.curTab=tab;renderContent(tab);
+}
+
+function renderContent(tab){
+  const c=document.getElementById('lc');
+  const idx=S.curLv;const lv=S.levels[idx];
+  const T=TEORIAS[idx]||TEORIAS[0];
+  const E=EJS[idx]||EJS[0];
+  const TR=TRV[idx]||TRV[0];
+
+  if(tab==='teoria'){
+    c.innerHTML=`<div class="tcard">
+      <div class="tci">${T.i}</div><h3>${T.t}</h3><p>${T.tx}</p>
+      <div class="abox"><div class="al2">💡 Analogía</div><p>${T.an}</p></div>
+    </div>
+    ${lv.teoriaOk
+      ?`<div style="background:rgba(16,185,129,.1);border:1.5px solid rgba(16,185,129,.3);border-radius:10px;padding:12px;text-align:center;font-size:13px;font-weight:700;color:#065F46">✅ Teoría completada — continúa con Ejercicios</div>`
+      :`<button class="btn-p" onclick="markTeoria(${idx})">✅ He leído — continuar</button>`}`;
+
+  }else if(tab==='ejercicio'){
+    let html='';
+    E.forEach((p,i)=>{html+=`<div class="estep"><div class="sn">${i+1}</div><div class="sc2"><p><strong>${p.p}</strong></p><p style="margin-top:4px">${p.d}</p><div class="clc">${p.c}</div></div></div>`;});
+    html+=lv.ejercicioOk
+      ?`<div style="background:rgba(16,185,129,.1);border:1.5px solid rgba(16,185,129,.3);border-radius:10px;padding:12px;text-align:center;font-size:13px;font-weight:700;color:#065F46">✅ Ejercicios revisados — ve a la Trivia</div>`
+      :`<button class="btn-p" onclick="markEjercicio(${idx})" ${lv.teoriaOk?'':'disabled'}>✅ Entendido — continuar${!lv.teoriaOk?' (completa Teoría primero)':''}</button>`;
+    c.innerHTML=html;
+
+  }else if(tab==='trivia'){
+    if(!lv.ejercicioOk){
+      c.innerHTML=`<div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-radius:10px;padding:20px;text-align:center"><div style="font-size:24px;margin-bottom:8px">⚠️</div><p style="font-size:13px;font-weight:700;color:#92400E">Primero completa Teoría y Ejercicios</p></div>`;
+      return;
+    }
+    if(lv.triviaOk){
+      c.innerHTML=`<div class="tscore"><div class="sb">${lv.triviaScore}/${TR.qs.length}</div><div class="slb">¡Trivia superada! 🎉</div><div class="progress-mini"><div class="progress-mini-fill" style="width:${Math.round(lv.triviaScore/TR.qs.length*100)}%"></div></div></div>
+      <div class="lvl-done-banner"><div class="dbi">🏅</div><h3>¡Nivel ${idx+1} completado!</h3><p>${idx<24?'El siguiente nivel se ha desbloqueado':'¡Completaste todos los niveles! Ve al Diploma 🎓'}</p></div>
+      ${idx<24?`<button class="btn-gr" onclick="goBack()">Ir al siguiente nivel →</button>`:`<button class="btn-gr" onclick="goBack();swTab('cert')">Ver mi Diploma 🏆</button>`}`;
+      return;
+    }
+    const submitted=lv.triviaSubmitted;
+    let html='';
+    TR.qs.forEach((q,qi)=>{
+      const selAnsVal=lv.triviaAnswers[qi];
+      const exVal=lv.exInputs[qi]||'';
+      html+=`<div class="tq">
+        <div class="qn">Pregunta ${qi+1} de ${TR.qs.length}</div>
+        <span class="qtype ${q.t==='ex'?'ex':'mc'}">${q.t==='ex'?'✏️ Ejercicio numérico':'🔘 Selección'}</span>
+        <div class="qt">${q.q}</div>`;
+      if(q.t==='mc'){
+        html+=`<div class="ol">`;
+        q.ops.forEach((op,oi)=>{
+          let cls='ob';
+          if(submitted){if(oi===q.r)cls+=' cr';else if(selAnsVal===oi)cls+=' wr';}
+          else{if(selAnsVal===oi)cls+=' sel';}
+          html+=`<button class="${cls}" onclick="selAns(${idx},${qi},${oi})"><span class="ob-dot"></span><span class="ob-txt">${op}</span></button>`;
+        });
+        html+=`</div>`;
+      }else{
+        let fbHtml='';
+        if(submitted&&exVal!==''){
+          const ok=checkEx(exVal,q.ans);
+          fbHtml=`<div class="ex-fb ${ok?'ok':'no'}">${ok?'✅ ¡Correcto!':'❌ La respuesta es '+q.ans+'. Pista: '+q.hint}</div>`;
+        }
+        const inpCls=(!submitted&&exVal!=='')?'inp-sel':'';
+        html+=`<div class="ex-input-wrap">
+          <input type="number" step="any" placeholder="Escribe tu respuesta..." id="ex-${idx}-${qi}" value="${exVal}" class="${inpCls}" oninput="saveExInput(${idx},${qi},this.value)" ${submitted?'disabled':''}/>
+          ${!submitted?`<button class="ex-check" onclick="checkSingleEx(${idx},${qi})">Verificar</button>`:''}
+        </div>${fbHtml}`;
+      }
+      html+=`</div>`;
+    });
+    if(!submitted){
+      html+=`<button class="btn-p" onclick="submitTrivia(${idx})">Enviar todas las respuestas</button>`;
+    }else{
+      const score=calcScore(idx);
+      const passed=score>=Math.ceil(TR.qs.length*0.6);
+      html+=`<div class="tscore"><div class="sb">${score}/${TR.qs.length}</div><div class="slb">${passed?'¡Aprobado! 🎉':'Necesitas '+Math.ceil(TR.qs.length*0.6)+'/'+TR.qs.length+' para pasar. ¡Tú puedes! 💪'}</div></div>`;
+      html+=`<button class="btn-p" onclick="retryTrivia(${idx})">${passed?'✅ Ver resultado':'🔄 Reintentar'}</button>`;
+    }
+    c.innerHTML=html;
+  }
+}
+
+function checkEx(val,ans){
+  const v=parseFloat(String(val).replace(',','.'));
+  const a=parseFloat(String(ans).replace(',','.'));
+  return !isNaN(v)&&Math.abs(v-a)<0.05;
+}
+function saveExInput(idx,qi,val){
+  S.levels[idx].exInputs[qi]=val;
+  const inp=document.getElementById('ex-'+idx+'-'+qi);
+  if(inp)inp.className=val!==''?'inp-sel':'';
+}
+function checkSingleEx(idx,qi){
+  const inp=document.getElementById('ex-'+idx+'-'+qi);
+  if(!inp||inp.value===''){showToast('⚠️ Escribe tu respuesta primero');return;}
+  S.levels[idx].exInputs[qi]=inp.value;renderContent('trivia');
+}
+function selAns(idx,qi,oi){
+  if(S.levels[idx].triviaSubmitted)return;
+  S.levels[idx].triviaAnswers[qi]=oi;renderContent('trivia');
+}
+function calcScore(idx){
+  const TR=TRV[idx]||TRV[0];const lv=S.levels[idx];let score=0;
+  TR.qs.forEach((q,qi)=>{
+    if(q.t==='mc'){if(lv.triviaAnswers[qi]===q.r)score++;}
+    else{if(checkEx(lv.exInputs[qi]||'',q.ans))score++;}
+  });
+  return score;
+}
+function submitTrivia(idx){
+  const TR=TRV[idx]||TRV[0];
+  S.levels[idx].triviaSubmitted=true;
+  const score=calcScore(idx);
+  S.levels[idx].triviaScore=score;
+  const passed=score>=Math.ceil(TR.qs.length*0.6);
+  if(passed){
+    S.levels[idx].triviaOk=true;S.levels[idx].st='completed';
+    if(idx+1<25)S.levels[idx+1].st='active';
+    renderLevels();updProg();
+    showToast('🎉 ¡Nivel '+(idx+1)+' superado!');
+  }
+  renderContent('trivia');
+}
+function retryTrivia(idx){
+  if(S.levels[idx].triviaOk){renderContent('trivia');return;}
+  S.levels[idx].triviaAnswers={};S.levels[idx].exInputs={};
+  S.levels[idx].triviaSubmitted=false;S.levels[idx].triviaScore=null;
+  renderContent('trivia');
+}
+function markTeoria(idx){
+  S.levels[idx].teoriaOk=true;showToast('📖 Teoría completada');renderLevels();renderContent('teoria');
+}
+function markEjercicio(idx){
+  if(!S.levels[idx].teoriaOk){showToast('⚠️ Primero lee la Teoría');return;}
+  S.levels[idx].ejercicioOk=true;showToast('✏️ Ejercicios revisados');renderLevels();renderContent('ejercicio');
+}
+function goBack(){goSc('main');renderLevels();updProg();}
+</script>
+</body>
+</html>
