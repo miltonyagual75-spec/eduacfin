@@ -628,6 +628,40 @@ let S={
   curLv:0,curTab:'teoria',prog:0
 };
 
+// 💾 Guardar estado en localStorage
+function guardarEstado(){
+  localStorage.setItem('educaFinEstado',JSON.stringify(S));
+}
+
+// 📂 Cargar estado desde localStorage
+function cargarEstado(){
+  const datos=localStorage.getItem('educaFinEstado');
+  if(datos){
+    try{
+      const estadoGuardado=JSON.parse(datos);
+      S=estadoGuardado;
+      return true;
+    }catch(e){
+      console.error('Error al cargar estado:',e);
+      return false;
+    }
+  }
+  return false;
+}
+
+// 🧹 Inicializar al cargar la página
+window.addEventListener('load',()=>{
+  if(cargarEstado()&&S.nombre){
+    // El estudiante ya completó el registro, mostrar dashboard
+    document.getElementById('hn').textContent=S.nombre.split(' ')[0];
+    document.getElementById('wbg').textContent='¡Hola, '+S.nombre.split(' ')[0]+'! 👋';
+    document.getElementById('cnm').textContent=S.nombre;
+    renderLevels();
+    updProg();
+    goSc('main');
+  }
+});
+
 function calcProg(){
   const done=S.levels.filter(l=>l.st==='completed').length;
   S.prog=done*4;return S.prog;
@@ -686,6 +720,7 @@ function doReg(){
   document.getElementById('hn').textContent=n.split(' ')[0];
   document.getElementById('wbg').textContent='¡Hola, '+n.split(' ')[0]+'! 👋';
   document.getElementById('cnm').textContent=n;
+  guardarEstado(); // 💾 Guardar datos del registro
   renderLevels();updProg();goSc('main');
 }
 
@@ -828,6 +863,7 @@ function checkEx(val,ans){
 }
 function saveExInput(idx,qi,val){
   S.levels[idx].exInputs[qi]=val;
+  guardarEstado(); // 💾 Guardar entrada
   const inp=document.getElementById('ex-'+idx+'-'+qi);
   if(inp)inp.className=val!==''?'inp-sel':'';
 }
@@ -838,7 +874,9 @@ function checkSingleEx(idx,qi){
 }
 function selAns(idx,qi,oi){
   if(S.levels[idx].triviaSubmitted)return;
-  S.levels[idx].triviaAnswers[qi]=oi;renderContent('trivia');
+  S.levels[idx].triviaAnswers[qi]=oi;
+  guardarEstado(); // 💾 Guardar respuesta
+  renderContent('trivia');
 }
 function calcScore(idx){
   const TR=TRV[idx]||TRV[0];const lv=S.levels[idx];let score=0;
@@ -860,20 +898,26 @@ function submitTrivia(idx){
     renderLevels();updProg();
     showToast('🎉 ¡Nivel '+(idx+1)+' superado!');
   }
+  guardarEstado(); // 💾 Guardar estado de trivia
   renderContent('trivia');
 }
 function retryTrivia(idx){
   if(S.levels[idx].triviaOk){renderContent('trivia');return;}
   S.levels[idx].triviaAnswers={};S.levels[idx].exInputs={};
   S.levels[idx].triviaSubmitted=false;S.levels[idx].triviaScore=null;
+  guardarEstado(); // 💾 Guardar reinicio
   renderContent('trivia');
 }
 function markTeoria(idx){
-  S.levels[idx].teoriaOk=true;showToast('📖 Teoría completada');renderLevels();renderContent('teoria');
+  S.levels[idx].teoriaOk=true;
+  guardarEstado(); // 💾 Guardar progreso
+  showToast('📖 Teoría completada');renderLevels();renderContent('teoria');
 }
 function markEjercicio(idx){
   if(!S.levels[idx].teoriaOk){showToast('⚠️ Primero lee la Teoría');return;}
-  S.levels[idx].ejercicioOk=true;showToast('✏️ Ejercicios revisados');renderLevels();renderContent('ejercicio');
+  S.levels[idx].ejercicioOk=true;
+  guardarEstado(); // 💾 Guardar progreso
+  showToast('✏️ Ejercicios revisados');renderLevels();renderContent('ejercicio');
 }
 function goBack(){goSc('main');renderLevels();updProg();}
 </script>
