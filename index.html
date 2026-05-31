@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Educación Financiera – UESER</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
 
@@ -483,7 +484,7 @@
               <div class="csg"><div class="csl"></div><div class="csn">Ing. Milton Yagual Yagual</div><div class="csr">Administrador del Curso</div></div>
             </div>
           </div></div>
-          <button class="btn-dl" id="btn-dl" onclick="showToast('✅ Diploma descargado en PDF')">⬇ Descargar Diploma PDF</button>
+          <button class="btn-dl" id="btn-dl" onclick="downloadPDF()">⬇ Descargar Diploma PDF</button>
         </div>
 
         <!-- Always-visible download button (disabled until 100%) -->
@@ -616,6 +617,7 @@ const TRV=[
   {qs:[{t:'mc',q:'Una meta SMART debe ser...',ops:['Solo grande y ambiciosa','Específica, medible, alcanzable, relevante y temporal','Indefinida en el tiempo','Solo de ahorro'],r:1},{t:'ex',q:'Meta $480 en 8 meses. ¿Cuánto ahorrar/mes?',ans:'60',hint:'$480 ÷ 8 = ?'},{t:'mc',q:'Sin metas financieras el dinero...',ops:['Se multiplica solo','Se invierte automáticamente','Tiende a desaparecer','Se ahorra por instinto'],r:2},{t:'ex',q:'Ahorra $45/mes. ¿En cuántos meses llegas a $360?',ans:'8',hint:'$360 ÷ $45 = ?'},{t:'mc',q:'Una meta financiera debe revisarse...',ops:['Nunca','Solo si falla','Regularmente','Solo al alcanzarla'],r:2}]},
   {qs:[{t:'mc',q:'Un plan financiero de vida se revisa...',ops:['Una sola vez','Cada 10 años','Anualmente como mínimo','Solo cuando hay crisis'],r:2},{t:'ex',q:'Meta $24,000 en 10 años. ¿Cuánto/mes?',ans:'200',hint:'$24,000 ÷ 120 = ?'},{t:'mc',q:'El plan financiero incluye metas para...',ops:['Solo el corto plazo','Solo el largo plazo','Corto, mediano y largo plazo','Solo inversiones'],r:2},{t:'ex',q:'Ahorro $150 + inversión $75. ¿Total al futuro?',ans:'225',hint:'$150 + $75 = ?'},{t:'mc',q:'Lo primero en cualquier plan financiero es...',ops:['Invertir en bolsa','Comprar seguros','Crear un fondo de emergencia','Pedir un crédito'],r:2}]},
   {qs:[{t:'mc',q:'¿Cuál es la combinación ideal?',ops:['Solo ahorrar','Solo invertir','Ahorrar para emergencias e invertir el excedente','Gastar todo hoy'],r:2},{t:'ex',q:'Ingresos $600, gastos $420. Ahorra 50% del resto. ¿Cuánto?',ans:'90',hint:'(600−420) × 0.5 = ?'},{t:'mc',q:'El fondo de emergencia debe cubrir...',ops:['1-2 semanas','1 mes','3-6 meses','1-2 años'],r:2},{t:'ex',q:'Gastos $800/mes. Quieres 4 meses de emergencia. ¿Cuánto?',ans:'3200',hint:'$800 × 4 = ?'},{t:'mc',q:'La educación financiera es importante porque...',ops:['Garantiza hacerte rico','Te da herramientas para mejores decisiones','Es obligatoria por ley','Solo sirve para adultos'],r:1}]},
+  {qs:[{t:'mc',q:'¿Porqué es importante la educación financiera?',ops:['Solo para ahorrar','Solo para invertir','Ahorrar para emergencias e invertir el excedente','Gastar todo hoy'],r:2},{t:'ex',q:'Ingresos $800, gastos $620. Ahorra 50% del resto. ¿Cuánto?',ans:'90',hint:'(800−620) × 0.5 = ?'},{t:'mc',q:'Un negocio sería una fuente de:',ops:['Pérdidas','Gastos','Ingresos','lujos'],r:2},{t:'ex',q:'Compras $400/mes. El 15 % del IVA. ¿Cuánto es?',ans:'60',hint:'$400 × 0,15 = ?'},{t:'mc',q:'la primera forma de comercio fue:',ops:['Crédito','Trueque','Exportación','Remates de saldos'],r:1}]},
 ];
 
 let S={
@@ -920,6 +922,26 @@ function markEjercicio(idx){
   showToast('✏️ Ejercicios revisados');renderLevels();renderContent('ejercicio');
 }
 function goBack(){goSc('main');renderLevels();updProg();}
+
+function downloadPDF() {
+  const element = document.querySelector('.cf'); // Capturamos el contenedor del diploma
+  const opt = {
+    margin:       10,
+    filename:     `Diploma_Finanzas_${S.nombre.replace(/\s+/g, '_')}.pdf`,
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+  };
+
+  showToast('⏳ Generando PDF...');
+  
+  html2pdf().set(opt).from(element).save().then(() => {
+    showToast('✅ Diploma descargado con éxito');
+  }).catch(err => {
+    console.error('Error al generar PDF:', err);
+    showToast('❌ Error al exportar el documento');
+  });
+}
 </script>
 </body>
 </html>
